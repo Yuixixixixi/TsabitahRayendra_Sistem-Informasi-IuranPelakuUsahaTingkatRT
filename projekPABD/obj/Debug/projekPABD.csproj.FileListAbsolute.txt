@@ -1,0 +1,11 @@
+D:\pabd\projek\projekPABD\projekPABD\obj\Debug\projekPABD.csproj.AssemblyReference.cache
+D:\pabd\projek\projekPABD\projekPABD\obj\Debug\projekPABD.Form1.resources
+D:\pabd\projek\projekPABD\projekPABD\obj\Debug\projekPABD.Properties.Resources.resources
+D:\pabd\projek\projekPABD\projekPABD\obj\Debug\projekPABD.utama.resources
+D:\pabd\projek\projekPABD\projekPABD\obj\Debug\projekPABD.csproj.GenerateResource.cache
+D:\pabd\projek\projekPABD\projekPABD\obj\Debug\projekPABD.csproj.CoreCompileInputs.cache
+D:\pabd\projek\projekPABD\projekPABD\bin\Debug\projekPABD.exe.config
+D:\pabd\projek\projekPABD\projekPABD\bin\Debug\projekPABD.exe
+D:\pabd\projek\projekPABD\projekPABD\bin\Debug\projekPABD.pdb
+D:\pabd\projek\projekPABD\projekPABD\obj\Debug\projekPABD.exe
+D:\pabd\projek\projekPABD\projekPABD\obj\Debug\projekPABD.pdb
