@@ -57,4 +57,58 @@ namespace projekPABD
                                    MAX(status_bayar)
                                    FOR bulan IN ([1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12])
                                ) AS PivotTable";
+                SqlDataAdapter da = new SqlDataAdapter(sql, conn);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
 
+                dgvLaporan.DataSource = dt;
+                dgvLaporanFull.DataSource = dt;
+
+                if (dgvLaporan.Columns.Contains("id_usaha")) dgvLaporan.Columns["id_usaha"].Visible = false;
+                if (dgvLaporanFull.Columns.Contains("id_usaha")) dgvLaporanFull.Columns["id_usaha"].Visible = false;
+
+                dgvLaporan.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                dgvLaporanFull.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+
+                HitungTotalan();
+            }
+            catch (Exception ex) { MessageBox.Show("Gagal Load: " + ex.Message); }
+            finally { conn.Close(); }
+        }
+        private void HitungTotalan()
+        {
+            long totalUang = 0;
+            int lunasCount = 0;
+            foreach (DataGridViewRow row in dgvLaporanFull.Rows)
+            {
+                for (int i = 4; i <= 15; i++)
+                {
+                    if (row.Cells[i].Value != null && row.Cells[i].Value.ToString() == "Lunas")
+                        lunasCount++;
+                }
+            }
+            totalUang = lunasCount * 20000;
+            lblTotalan.Text = "Total Dana Terkumpul: Rp " + totalUang.ToString("N0");
+            lblInfoDetail.Text = "Detail: " + lunasCount + " Transaksi Lunas (@Rp 20.000)";
+        }
+
+        private void utama_Load(object sender, EventArgs e)
+        {
+            LoadLaporan();
+            if (cbStatus.Items.Count == 0) { cbStatus.Items.Add("Lunas"); cbStatus.Items.Add("Belum Lunas"); }
+            cbStatus.SelectedIndex = 0;
+            numBulan.Minimum = 1;
+            numBulan.Maximum = 12;
+        }
+
+        public void dgvLaporan_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                DataGridViewRow row = dgvLaporan.Rows[e.RowIndex];
+                selectedID = row.Cells["id_usaha"].Value.ToString();
+                txtNamaPemilik.Text = row.Cells["nama_pemilik"].Value.ToString();
+                txtPelakuUsaha.Text = row.Cells["nama_usaha"].Value.ToString();
+                txtNoWA.Text = row.Cells["no_wa"].Value.ToString();
+            }
+        }
