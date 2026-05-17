@@ -48,6 +48,20 @@ namespace projekPABD
             tabLaporan.Controls.Add(btnUpdateTarif);
         }
 
+        private void utama_Load(object sender, EventArgs e)
+        {
+            if (cbStatus.Items.Count == 0) { cbStatus.Items.Add("Lunas"); cbStatus.Items.Add("Belum Lunas"); }
+            cbStatus.SelectedIndex = 0;
+
+            numBulan.Minimum = 1;
+            numBulan.Maximum = 12;
+
+            // Load tarif default dari database berdasarkan tahun aktif awal
+            nominalIuran = AmbilTarifDariDB(tahunBerjalan);
+            if (numIuranLaporan != null) numIuranLaporan.Value = nominalIuran;
+
+            LoadLaporan();
+        }
 
     }
 }
