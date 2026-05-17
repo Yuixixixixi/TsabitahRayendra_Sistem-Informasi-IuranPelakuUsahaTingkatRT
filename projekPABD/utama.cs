@@ -409,5 +409,26 @@ namespace projekPABD
             catch (Exception ex) { MessageBox.Show("Reset gagal: " + ex.Message); }
             finally { conn.Close(); }
         }
+
+
+        private void ClearInput() 
+        { 
+            txtNamaPemilik.Clear(); 
+            txtPelakuUsaha.Clear(); 
+            txtNoWA.Clear(); 
+        }
+        private void dgvLaporan_CellClick(object sender, DataGridViewCellEventArgs e) 
+        { 
+        
+        }
+        private void tabLaporan_Click(object sender, EventArgs e) 
+        { 
+        
+        }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            ClearInput();
+        }
     }
 }
