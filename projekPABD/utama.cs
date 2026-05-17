@@ -297,5 +297,37 @@ namespace projekPABD
             catch (Exception ex) { MessageBox.Show("Gagal Tambah Data: " + ex.Message); }
             finally { conn.Close(); }
         }
+
+        private void btnUpdate_Click(object sender, EventArgs e)
+        {
+            if (dgvLaporan.CurrentRow == null) return;
+            string currentID = dgvLaporan.CurrentRow.Cells["id_usaha"].Value.ToString();
+
+            if (!ValidasiNomorWA(txtNoWA.Text))
+            {
+                MessageBox.Show("Nomor WhatsApp harus diawali dengan '08' dan berupa angka.");
+                return;
+            }
+
+            SqlConnection conn = konn.GetConn();
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("sp_UpdatePelakuUsaha", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@IdUsaha", currentID);
+                    cmd.Parameters.AddWithValue("@NamaPemilik", txtNamaPemilik.Text);
+                    cmd.Parameters.AddWithValue("@NamaUsaha", txtPelakuUsaha.Text);
+                    cmd.Parameters.AddWithValue("@NoWa", txtNoWA.Text);
+
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                LoadLaporan();
+                MessageBox.Show("Data Berhasil Diubah!");
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
+            finally { conn.Close(); }
+        }
     }
 }
