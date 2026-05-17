@@ -102,5 +102,32 @@ namespace projekPABD
             nominalIuran = numIuranLaporan.Value;
         }
 
+        private void btnUpdateTarif_Click(object sender, EventArgs e)
+        {
+            nominalIuran = numIuranLaporan.Value;
+            SqlConnection conn = konn.GetConn();
+            try
+            {
+                conn.Open();
+                string query = @"
+                    IF EXISTS (SELECT 1 FROM tarif_iuran WHERE tahun = @Tahun)
+                        UPDATE tarif_iuran SET tarif = @Tarif WHERE tahun = @Tahun;
+                    ELSE
+                        INSERT INTO tarif_iuran (tahun, tarif) VALUES (@Tahun, @Tarif);";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Tahun", tahunBerjalan);
+                    cmd.Parameters.AddWithValue("@Tarif", nominalIuran);
+                    cmd.ExecuteNonQuery();
+                }
+
+                HitungTotalan();
+                MessageBox.Show("Tarif iuran tahun " + tahunBerjalan + " berhasil dikunci ke database!", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex) { MessageBox.Show("Gagal mengunci tarif: " + ex.Message); }
+            finally { conn.Close(); }
+        }
+
     }
 }
