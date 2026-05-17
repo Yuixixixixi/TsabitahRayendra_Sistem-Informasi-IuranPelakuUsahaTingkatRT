@@ -86,5 +86,17 @@ namespace projekPABD
             return tarif;
         }
 
+        private void NumTahunLaporan_ValueChanged(object sender, EventArgs e)
+        {
+            tahunBerjalan = (int)numTahunLaporan.Value;
+
+            // Ambil data tarif yang terkunci di database per tahun
+            nominalIuran = AmbilTarifDariDB(tahunBerjalan);
+            numIuranLaporan.Value = nominalIuran;
+
+            LoadLaporan();
+        }
+
+
     }
 }
