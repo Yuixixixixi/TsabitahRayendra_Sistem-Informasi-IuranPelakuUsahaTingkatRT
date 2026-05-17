@@ -363,5 +363,24 @@ namespace projekPABD
                 finally { conn.Close(); }
             }
         }
+
+        private void btnTestInjection_Click(object sender, EventArgs e)
+        {
+            SqlConnection conn = konn.GetConn();
+            try
+            {
+                conn.Open();
+                string query = "UPDATE pelaku_usaha SET nama_pemilik = ' HACKED ' WHERE nama_pemilik = '" + txtNamaPemilik.Text + "'";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    int result = cmd.ExecuteNonQuery();
+                    MessageBox.Show(result + " baris terupdate", "SQL Injection Success", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                LoadLaporan();
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
+            finally { conn.Close(); }
+        }
     }
 }
