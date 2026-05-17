@@ -146,5 +146,46 @@ namespace projekPABD
             }
         }
 
+        private void LoadLaporan()
+        {
+            SqlConnection conn = konn.GetConn();
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("sp_GetLaporanBulanan", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@Tahun", tahunBerjalan);
+
+                    using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                    {
+                        dtLaporan = new DataTable();
+                        da.Fill(dtLaporan);
+
+                        bindingSource.DataSource = dtLaporan;
+                        dgvLaporan.DataSource = bindingSource;
+                        dgvLaporanFull.DataSource = bindingSource;
+
+                        if (bindingNavigator1 != null) bindingNavigator1.BindingSource = bindingSource;
+
+                        dgvLaporan.ReadOnly = true;
+                        dgvLaporanFull.ReadOnly = true;
+
+                        dgvLaporan.AllowUserToAddRows = false;
+                        dgvLaporanFull.AllowUserToAddRows = false;
+
+                        if (dgvLaporan.Columns.Contains("id_usaha")) dgvLaporan.Columns["id_usaha"].Visible = false;
+                        if (dgvLaporanFull.Columns.Contains("id_usaha")) dgvLaporanFull.Columns["id_usaha"].Visible = false;
+
+                        dgvLaporan.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                        dgvLaporanFull.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+
+                        BindControls();
+                        HitungTotalan();
+                    }
+                }
+            }
+            catch (Exception ex) { MessageBox.Show("Gagal Load Data: " + ex.Message); }
+        }
+
     }
 }
