@@ -97,6 +97,10 @@ namespace projekPABD
             LoadLaporan();
         }
 
+        private void NumIuranLaporan_ValueChanged(object sender, EventArgs e)
+        {
+            nominalIuran = numIuranLaporan.Value;
+        }
 
     }
 }
