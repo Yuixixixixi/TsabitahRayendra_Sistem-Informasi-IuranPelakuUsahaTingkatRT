@@ -256,5 +256,46 @@ namespace projekPABD
             catch (Exception ex) { MessageBox.Show("Transaksi Gagal: " + ex.Message); }
             finally { conn.Close(); }
         }
+
+        private void btnSimpan1_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtNamaPemilik.Text) || string.IsNullOrWhiteSpace(txtPelakuUsaha.Text))
+            {
+                MessageBox.Show("Nama Pemilik & Nama Usaha wajib diisi!");
+                return;
+            }
+            if (!ValidasiNomorWA(txtNoWA.Text))
+            {
+                MessageBox.Show("Nomor WhatsApp harus diawali dengan '08' dan berisi angka saja.");
+                return;
+            }
+
+            SqlConnection conn = konn.GetConn();
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("sp_InsertPelakuUsaha", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@NamaPemilik", txtNamaPemilik.Text);
+                    cmd.Parameters.AddWithValue("@NamaUsaha", txtPelakuUsaha.Text);
+                    cmd.Parameters.AddWithValue("@NoWa", txtNoWA.Text);
+                    cmd.Parameters.AddWithValue("@Tahun", tahunBerjalan);
+
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                bindingSource.CancelEdit();
+                ClearInput();
+                LoadLaporan();
+                if (bindingSource.CurrencyManager != null)
+                {
+                    bindingSource.CurrencyManager.Refresh();
+                }
+
+                MessageBox.Show("Pelaku Usaha Berhasil Ditambahkan!");
+            }
+            catch (Exception ex) { MessageBox.Show("Gagal Tambah Data: " + ex.Message); }
+            finally { conn.Close(); }
+        }
     }
 }
