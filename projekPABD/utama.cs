@@ -63,5 +63,28 @@ namespace projekPABD
             LoadLaporan();
         }
 
+        private decimal AmbilTarifDariDB(int tahun)
+        {
+            decimal tarif = 30000; // Default cadangan jika data kosong
+            SqlConnection conn = konn.GetConn();
+            try
+            {
+                conn.Open();
+                string query = "SELECT tarif FROM tarif_iuran WHERE tahun = @Tahun";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Tahun", tahun);
+                    object result = cmd.ExecuteScalar();
+                    if (result != null && result != DBNull.Value)
+                    {
+                        tarif = Convert.ToDecimal(result);
+                    }
+                }
+            }
+            catch { }
+            finally { conn.Close(); }
+            return tarif;
+        }
+
     }
 }
