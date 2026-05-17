@@ -187,5 +187,16 @@ namespace projekPABD
             catch (Exception ex) { MessageBox.Show("Gagal Load Data: " + ex.Message); }
         }
 
+        private void BindControls()
+        {
+            txtNamaPemilik.DataBindings.Clear();
+            txtPelakuUsaha.DataBindings.Clear();
+            txtNoWA.DataBindings.Clear();
+
+            txtNamaPemilik.DataBindings.Add("Text", bindingSource, "nama_pemilik", true, DataSourceUpdateMode.OnPropertyChanged);
+            txtPelakuUsaha.DataBindings.Add("Text", bindingSource, "nama_usaha", true, DataSourceUpdateMode.OnPropertyChanged);
+            txtNoWA.DataBindings.Add("Text", bindingSource, "no_wa", true, DataSourceUpdateMode.OnPropertyChanged);
+        }
+
     }
 }
