@@ -19,6 +19,14 @@ namespace projekPABD
         private NumericUpDown numIuranLaporan;
         private Button btnUpdateTarif;
 
-       
+        public utama()
+        {
+            InitializeComponent();
+            dgvLaporan.CellFormatting += dgv_CellFormatting;
+            dgvLaporanFull.CellFormatting += dgv_CellFormatting;
+            BuatKomponenLaporanDinamis();
+        }
+
+
     }
 }
