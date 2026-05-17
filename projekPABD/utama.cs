@@ -329,5 +329,39 @@ namespace projekPABD
             catch (Exception ex) { MessageBox.Show(ex.Message); }
             finally { conn.Close(); }
         }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            if (dgvLaporan.CurrentRow == null) return;
+            string currentID = dgvLaporan.CurrentRow.Cells["id_usaha"].Value.ToString();
+
+            if (MessageBox.Show("Hapus data pelaku usaha ini?", "Konfirmasi", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            {
+                SqlConnection conn = konn.GetConn();
+                try
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_DeletePelakuUsaha", conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@IdUsaha", currentID);
+
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    ClearInput();
+                    LoadLaporan();
+
+                    if (bindingSource.CurrencyManager != null)
+                    {
+                        bindingSource.CurrencyManager.Refresh();
+                    }
+
+                    MessageBox.Show("Data Berhasil Dihapus.");
+                }
+                catch (Exception ex) { MessageBox.Show("Gagal menghapus: " + ex.Message); }
+                finally { conn.Close(); }
+            }
+        }
     }
 }
