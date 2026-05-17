@@ -215,5 +215,11 @@ namespace projekPABD
             if (lblTotalan != null) lblTotalan.Text = "Total Dana Terkumpul: Rp " + totalUang.ToString("N0");
             if (lblInfoDetail != null) lblInfoDetail.Text = "Detail: " + lunasCount + " Transaksi Lunas (@Rp " + nominalIuran.ToString("N0") + ")";
         }
+
+        private bool ValidasiNomorWA(string nomor)
+        {
+            if (!nomor.StartsWith("08")) return false;
+            return long.TryParse(nomor, out _);
+        }
     }
 }
