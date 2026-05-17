@@ -221,5 +221,40 @@ namespace projekPABD
             if (!nomor.StartsWith("08")) return false;
             return long.TryParse(nomor, out _);
         }
+
+        private void btnBayar_Click(object sender, EventArgs e)
+        {
+            if (dgvLaporan.CurrentRow == null) return;
+            string currentID = dgvLaporan.CurrentRow.Cells["id_usaha"].Value.ToString();
+
+            SqlConnection conn = konn.GetConn();
+            try
+            {
+                conn.Open();
+                int targetBulan = (int)numBulan.Value;
+                string statusValue = cbStatus.Text;
+
+                int startBulan = (statusValue == "Lunas") ? 1 : targetBulan;
+
+                for (int i = startBulan; i <= targetBulan; i++)
+                {
+                    using (SqlCommand cmd = new SqlCommand("sp_SavePembayaran", conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@IdUsaha", currentID);
+                        cmd.Parameters.AddWithValue("@Bulan", i);
+                        cmd.Parameters.AddWithValue("@Tahun", tahunBerjalan);
+                        cmd.Parameters.AddWithValue("@JumlahBayar", nominalIuran);
+                        cmd.Parameters.AddWithValue("@StatusBayar", statusValue);
+
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                LoadLaporan();
+                MessageBox.Show("Status Pelunasan Iuran Berhasil Diperbarui!");
+            }
+            catch (Exception ex) { MessageBox.Show("Transaksi Gagal: " + ex.Message); }
+            finally { conn.Close(); }
+        }
     }
 }
