@@ -129,5 +129,22 @@ namespace projekPABD
             finally { conn.Close(); }
         }
 
+        private void dgv_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.Value != null)
+            {
+                if (e.Value.ToString() == "Lunas")
+                {
+                    e.CellStyle.BackColor = Color.LightGreen;
+                    e.CellStyle.ForeColor = Color.Black;
+                }
+                else if (e.Value.ToString() == "Belum Lunas")
+                {
+                    e.CellStyle.BackColor = Color.MistyRose;
+                    e.CellStyle.ForeColor = Color.Red;
+                }
+            }
+        }
+
     }
 }
