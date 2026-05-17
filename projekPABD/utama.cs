@@ -198,5 +198,22 @@ namespace projekPABD
             txtNoWA.DataBindings.Add("Text", bindingSource, "no_wa", true, DataSourceUpdateMode.OnPropertyChanged);
         }
 
+        private void HitungTotalan()
+        {
+            long totalUang = 0;
+            int lunasCount = 0;
+            foreach (DataRow row in dtLaporan.Rows)
+            {
+                for (int i = 4; i <= 15; i++)
+                {
+                    if (row[i] != DBNull.Value && row[i].ToString() == "Lunas")
+                        lunasCount++;
+                }
+            }
+            totalUang = lunasCount * (long)nominalIuran;
+
+            if (lblTotalan != null) lblTotalan.Text = "Total Dana Terkumpul: Rp " + totalUang.ToString("N0");
+            if (lblInfoDetail != null) lblInfoDetail.Text = "Detail: " + lunasCount + " Transaksi Lunas (@Rp " + nominalIuran.ToString("N0") + ")";
+        }
     }
 }
