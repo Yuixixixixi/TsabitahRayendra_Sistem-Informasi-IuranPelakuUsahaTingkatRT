@@ -382,5 +382,32 @@ namespace projekPABD
             catch (Exception ex) { MessageBox.Show(ex.Message); }
             finally { conn.Close(); }
         }
+
+        private void btnResetData_Click(object sender, EventArgs e)
+        {
+            SqlConnection conn = konn.GetConn();
+            try
+            {
+                conn.Open();
+                string query = @"
+                    IF OBJECT_ID('dbo.pelaku_usaha_backup') IS NOT NULL
+                    BEGIN
+                        DELETE FROM dbo.pelaku_usaha;
+                        SET IDENTITY_INSERT dbo.pelaku_usaha ON;
+                        INSERT INTO dbo.pelaku_usaha (id_usaha, nama_pemilik, nama_usaha, no_wa, tahun)
+                        SELECT id_usaha, nama_pemilik, nama_usaha, no_wa, tahun FROM dbo.pelaku_usaha_backup;
+                        SET IDENTITY_INSERT dbo.pelaku_usaha OFF;
+                    END";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                MessageBox.Show("Data berhasil direset", "Reset Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LoadLaporan();
+            }
+            catch (Exception ex) { MessageBox.Show("Reset gagal: " + ex.Message); }
+            finally { conn.Close(); }
+        }
     }
 }
