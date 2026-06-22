@@ -471,6 +471,40 @@ namespace projekPABD
 
             SearchPelakuUsaha(keyword);
         }
-       
+        private void SearchPelakuUsaha(string keyword)
+        {
+            DataAccessLogic db = new DataAccessLogic();
+            SqlConnection conn = db.GetConn();
+
+            try
+            {
+                using (SqlCommand cmd = new SqlCommand("sp_SearchPelakuUsaha", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@Keyword", keyword);
+                    cmd.Parameters.AddWithValue("@Tahun", tahunBerjalan);
+
+                    conn.Open();
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
+
+                    dgvLaporan.DataSource = dt;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Terjadi kesalahan saat mencari data: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                if (conn.State == ConnectionState.Open)
+                {
+                    conn.Close();
+                }
+            }
+        }
+
+        
     }
 }
