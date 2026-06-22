@@ -536,6 +536,46 @@ namespace projekPABD
             }
         }
 
+        private void btnSimpanKeDB_Click(object sender, EventArgs e)
+        {
+            DataTable dt = null;
+            if (dgvLaporan.DataSource is BindingSource bs)
+            {
+                dt = bs.DataSource as DataTable;
+            }
+            else
+            {
+                dt = dgvLaporan.DataSource as DataTable;
+            }
+
+            if (dt == null || dt.Rows.Count == 0)
+            {
+                MessageBox.Show("Tidak ada data untuk disimpan. Silakan klik Impor Excel terlebih dahulu.", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (!dt.Columns.Contains("nama_pemilik") || !dt.Columns.Contains("nama_usaha"))
+            {
+                MessageBox.Show("Gagal! Struktur kolom grid tidak sesuai untuk import massal.", "Kesalahan Struktur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            List<DataRow> daftarData = new List<DataRow>();
+            foreach (DataRow row in dt.Rows)
+            {
+                daftarData.Add(row);
+            }
+
+            DataAccessLogic dbLogic = new DataAccessLogic();
+            bool statusSukses = dbLogic.InsertMassalPelakuUsaha(daftarData, tahunBerjalan);
+
+            if (statusSukses)
+            {
+                MessageBox.Show("Semua data warga dari Excel berhasil diimport dengan aman.", "Transaksi Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LoadLaporan();
+            }
+        }
+
         
     }
 }
