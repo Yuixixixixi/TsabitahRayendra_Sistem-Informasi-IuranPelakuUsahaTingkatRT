@@ -590,6 +590,21 @@ namespace projekPABD
             CetakLaporan frmCetak = new CetakLaporan(tahunDipilih);
             frmCetak.ShowDialog();
         }
+        public void LoadLogAktivitas()
+        {
+            try
+            {
+                DataTable dt = dbLogic.GetLogAktivitas();
+                dgvLog.DataSource = dt;
+
+                dgvLog.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Gagal memuat log sistem: " + ex.Message, "Error Log", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         
     }
 }
