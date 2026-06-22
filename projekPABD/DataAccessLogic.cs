@@ -63,6 +63,26 @@ namespace projekPABD
             }
             return dt;
         }
-        
+        public DataTable GetStatusIuranPie(int tahun)
+        {
+            DataTable dt = new DataTable();
+            using (SqlConnection conn = GetConn())
+            {
+                string query = "SELECT status_bayar, COUNT(*) as Total FROM dbo.pembayaran WHERE tahun = @Tahun GROUP BY status_bayar";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Tahun", tahun);
+                    try
+                    {
+                        conn.Open();
+                        using (SqlDataAdapter da = new SqlDataAdapter(cmd)) { da.Fill(dt); }
+                    }
+                    catch { }
+                }
+            }
+            return dt;
+        }
+
+       
     }
 }
