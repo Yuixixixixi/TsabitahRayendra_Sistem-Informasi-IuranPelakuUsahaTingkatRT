@@ -465,6 +465,12 @@ namespace projekPABD
             ClearInput();
         }
 
-        
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            string keyword = txtSearch.Text.Trim();
+
+            SearchPelakuUsaha(keyword);
+        }
+       
     }
 }
