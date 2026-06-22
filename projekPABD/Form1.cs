@@ -50,8 +50,8 @@ namespace projekPABD
                     // Jika berhasil, pindah ke form utama
                     MessageBox.Show("Login Berhasil!", "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    utama formUtama = new utama(); // Nama sesuai file 'utama.cs' kamu
-                    formUtama.Show();
+                    Dashboard frmDashboard = new Dashboard();
+                    frmDashboard.Show();
                     this.Hide(); // Sembunyikan form login
                 }
                 else
