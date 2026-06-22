@@ -584,6 +584,12 @@ namespace projekPABD
             this.Hide();
         }
 
+        private void btnCetak_Click(object sender, EventArgs e)
+        {
+            int tahunDipilih = Convert.ToInt32(numTahunLaporan.Value);
+            CetakLaporan frmCetak = new CetakLaporan(tahunDipilih);
+            frmCetak.ShowDialog();
+        }
         
     }
 }
