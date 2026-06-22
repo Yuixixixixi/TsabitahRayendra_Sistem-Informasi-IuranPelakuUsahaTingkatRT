@@ -576,6 +576,14 @@ namespace projekPABD
             }
         }
 
+        private void btnKembali_Click(object sender, EventArgs e)
+        {
+            Dashboard frmDashboard = new Dashboard();
+            frmDashboard.Show();
+
+            this.Hide();
+        }
+
         
     }
 }
