@@ -1,7 +1,10 @@
-﻿using System;
+﻿using ExcelDataReader;
+using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 
 namespace projekPABD
@@ -12,12 +15,13 @@ namespace projekPABD
         private BindingSource bindingSource = new BindingSource();
         private DataTable dtLaporan = new DataTable();
 
-        private int tahunBerjalan = 2026;
+        private int tahunBerjalan = DateTime.Now.Year;
         private decimal nominalIuran = 30000;
 
         private NumericUpDown numTahunLaporan;
         private NumericUpDown numIuranLaporan;
         private Button btnUpdateTarif;
+        DataAccessLogic dbLogic = new DataAccessLogic();
 
         public utama()
         {
@@ -259,43 +263,73 @@ namespace projekPABD
 
         private void btnSimpan1_Click(object sender, EventArgs e)
         {
+            // 1. Validasi Input Form
             if (string.IsNullOrWhiteSpace(txtNamaPemilik.Text) || string.IsNullOrWhiteSpace(txtPelakuUsaha.Text))
             {
-                MessageBox.Show("Nama Pemilik & Nama Usaha wajib diisi!");
+                MessageBox.Show("Nama Pemilik & Nama Usaha wajib diisi!", "Validasi Gagal", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             if (!ValidasiNomorWA(txtNoWA.Text))
             {
-                MessageBox.Show("Nomor WhatsApp harus diawali dengan '08' dan berisi angka saja.");
+                MessageBox.Show("Nomor WhatsApp harus diawali dengan '08' dan berisi angka saja.", "Validasi Gagal", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            SqlConnection conn = konn.GetConn();
+            // 2. Mengambil koneksi dari DataAccessLogic
+            DataAccessLogic db = new DataAccessLogic();
+            SqlConnection conn = db.GetConn();
+
             try
             {
                 using (SqlCommand cmd = new SqlCommand("sp_InsertPelakuUsaha", conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@NamaPemilik", txtNamaPemilik.Text);
-                    cmd.Parameters.AddWithValue("@NamaUsaha", txtPelakuUsaha.Text);
-                    cmd.Parameters.AddWithValue("@NoWa", txtNoWA.Text);
+
+                    // Menggunakan parameter yang sesuai dengan Stored Procedure di database
+                    cmd.Parameters.AddWithValue("@NamaPemilik", txtNamaPemilik.Text.Trim());
+                    cmd.Parameters.AddWithValue("@NamaUsaha", txtPelakuUsaha.Text.Trim());
+                    cmd.Parameters.AddWithValue("@NoWa", txtNoWA.Text.Trim());
                     cmd.Parameters.AddWithValue("@Tahun", tahunBerjalan);
 
                     conn.Open();
                     cmd.ExecuteNonQuery();
                 }
+
+                // 3. Reset dan Refresh Data UI
                 bindingSource.CancelEdit();
                 ClearInput();
                 LoadLaporan();
+
                 if (bindingSource.CurrencyManager != null)
                 {
                     bindingSource.CurrencyManager.Refresh();
                 }
 
-                MessageBox.Show("Pelaku Usaha Berhasil Ditambahkan!");
+                MessageBox.Show("Pelaku Usaha Berhasil Ditambahkan!", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            catch (Exception ex) { MessageBox.Show("Gagal Tambah Data: " + ex.Message); }
-            finally { conn.Close(); }
+            catch (SqlException ex)
+            {
+                // Menangkap RAISERROR duplikasi dari database
+                if (ex.Number == 50000 || ex.Message.Contains("sudah terdaftar"))
+                {
+                    MessageBox.Show(ex.Message, "Peringatan Duplikasi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                else
+                {
+                    MessageBox.Show("Gagal Database: " + ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Gagal Tambah Data: " + ex.Message, "System Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                if (conn.State == ConnectionState.Open)
+                {
+                    conn.Close();
+                }
+            }
         }
 
         private void btnUpdate_Click(object sender, EventArgs e)
@@ -411,24 +445,26 @@ namespace projekPABD
         }
 
 
-        private void ClearInput() 
-        { 
-            txtNamaPemilik.Clear(); 
-            txtPelakuUsaha.Clear(); 
-            txtNoWA.Clear(); 
+        private void ClearInput()
+        {
+            txtNamaPemilik.Clear();
+            txtPelakuUsaha.Clear();
+            txtNoWA.Clear();
         }
-        private void dgvLaporan_CellClick(object sender, DataGridViewCellEventArgs e) 
-        { 
-        
+        private void dgvLaporan_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
-        private void tabLaporan_Click(object sender, EventArgs e) 
-        { 
-        
+        private void tabLaporan_Click(object sender, EventArgs e)
+        {
+
         }
 
         private void btnClear_Click(object sender, EventArgs e)
         {
             ClearInput();
         }
+
+        
     }
 }
