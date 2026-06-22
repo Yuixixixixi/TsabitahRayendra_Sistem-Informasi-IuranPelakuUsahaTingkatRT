@@ -87,6 +87,13 @@ namespace projekPABD
             }
         }
 
+        private void btnKelola_Click(object sender, EventArgs e)
+        {
+            utama frmUtama = new utama();
+            frmUtama.Show();
+            this.Hide();
+        }
+
         
     }
 }
