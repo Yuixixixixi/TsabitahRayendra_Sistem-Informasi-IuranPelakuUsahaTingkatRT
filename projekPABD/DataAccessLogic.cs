@@ -83,6 +83,40 @@ namespace projekPABD
             return dt;
         }
 
-       
+        public bool InsertMassalPelakuUsaha(List<DataRow> daftarData, int tahun)
+        {
+            using (SqlConnection conn = GetConn())
+            {
+                conn.Open();
+                SqlTransaction transaction = conn.BeginTransaction();
+
+                try
+                {
+                    foreach (DataRow row in daftarData)
+                    {
+                        using (SqlCommand cmd = new SqlCommand("sp_InsertPelakuUsaha", conn, transaction))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+
+                            cmd.Parameters.AddWithValue("@NamaPemilik", row["nama_pemilik"].ToString().Trim());
+                            cmd.Parameters.AddWithValue("@NamaUsaha", row["nama_usaha"].ToString().Trim());
+                            cmd.Parameters.AddWithValue("@NoWa", row["no_wa"].ToString().Trim());
+                            cmd.Parameters.AddWithValue("@Tahun", tahun);
+
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                    transaction.Commit();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    MessageBox.Show("Transaksi di-rollback! Alasan: " + ex.Message, "Peringatan Transaksi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return false;
+                }
+            }
+        }
+      
     }
 }
