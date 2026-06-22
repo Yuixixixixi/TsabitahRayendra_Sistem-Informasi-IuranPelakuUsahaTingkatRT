@@ -10,6 +10,11 @@ namespace projekPABD
     {
         private static string connectionString = @"Server=DESKTOP-031PEAQ\SQLEXPRESS;Database=DB_iuranRT;Trusted_Connection=True;";
 
-        
+        public SqlConnection GetConn()
+        {
+            return new SqlConnection(connectionString);
+        }
+
+       
     }
 }
