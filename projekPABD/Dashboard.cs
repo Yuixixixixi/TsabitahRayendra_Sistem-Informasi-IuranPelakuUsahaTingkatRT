@@ -15,6 +15,11 @@ namespace projekPABD
     {
         DataAccessLogic dbLogic = new DataAccessLogic();
 
-        
+        public Dashboard()
+        {
+            InitializeComponent();
+        }
+
+       
     }
 }
