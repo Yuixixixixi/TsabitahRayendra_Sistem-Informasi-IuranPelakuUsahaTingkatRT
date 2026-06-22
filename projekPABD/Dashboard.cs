@@ -101,6 +101,24 @@ namespace projekPABD
             this.Hide();
         }
 
-        
+        private void chart1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void chartUsaha_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblTotalUsaha_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
