@@ -15,6 +15,30 @@ namespace projekPABD
             return new SqlConnection(connectionString);
         }
 
-       
+        public DataTable GetAllPelakuUsaha()
+        {
+            DataTable dt = new DataTable();
+            using (SqlConnection conn = GetConn())
+            {
+                using (SqlCommand cmd = new SqlCommand("SELECT * FROM dbo.pelaku_usaha", conn))
+                {
+                    try
+                    {
+                        conn.Open();
+                        using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Gagal mengambil data: " + ex.Message);
+                    }
+                }
+            }
+            return dt;
+        }
+
+        
     }
 }
