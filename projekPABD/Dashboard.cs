@@ -20,6 +20,12 @@ namespace projekPABD
             InitializeComponent();
         }
 
-       
+        private void Dashboard_Load(object sender, EventArgs e)
+        {
+            numTahun.Value = DateTime.Now.Year;
+            LoadDataChart();
+        }
+
+      
     }
 }
