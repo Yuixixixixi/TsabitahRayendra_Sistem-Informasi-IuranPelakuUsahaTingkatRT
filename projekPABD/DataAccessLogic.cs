@@ -117,6 +117,24 @@ namespace projekPABD
                 }
             }
         }
-      
+        public int GetTotalPelakuUsaha()
+        {
+            int total = 0;
+            using (SqlConnection conn = GetConn())
+            {
+                string query = "SELECT COUNT(*) FROM dbo.pelaku_usaha";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    try
+                    {
+                        conn.Open();
+                        total = (int)cmd.ExecuteScalar();
+                    }
+                    catch { }
+                }
+            }
+            return total;
+        }
+        
     }
 }
