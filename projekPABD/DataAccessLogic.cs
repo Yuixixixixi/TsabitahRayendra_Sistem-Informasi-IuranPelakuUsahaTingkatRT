@@ -39,6 +39,30 @@ namespace projekPABD
             return dt;
         }
 
+        public DataTable GetChartByTahun()
+        {
+            DataTable dt = new DataTable();
+            using (SqlConnection conn = GetConn())
+            {
+                string query = "SELECT tahun, COUNT(id_usaha) as JumlahUsaha FROM dbo.pelaku_usaha GROUP BY tahun";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    try
+                    {
+                        conn.Open();
+                        using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                        {
+                            da.Fill(dt);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Gagal load data chart: " + ex.Message);
+                    }
+                }
+            }
+            return dt;
+        }
         
     }
 }
