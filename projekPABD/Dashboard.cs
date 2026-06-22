@@ -26,6 +26,11 @@ namespace projekPABD
             LoadDataChart();
         }
 
-      
+        public void numTahun_ValueChanged(object sender, EventArgs e)
+        {
+            LoadDataChart(); // Memicu grafik buat refresh setiap tahunnya diganti
+        }
+
+        
     }
 }
