@@ -10,6 +10,12 @@ namespace projekPABD
     {
         private int _tahun;
 
+        public CetakLaporan(int tahun)
+        {
+            InitializeComponent();
+            _tahun = tahun;
+        }
+
         
     }
 }
