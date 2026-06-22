@@ -135,6 +135,20 @@ namespace projekPABD
             }
             return total;
         }
-        
+        public DataTable GetLogAktivitas()
+        {
+            DataTable dt = new DataTable();
+            string query = "SELECT id_log AS [ID Log], aksi AS [Aksi Aktivitas], deskripsi AS [Keterangan Log], waktu_kejadian AS [Waktu Sistem] FROM Log_Aktivitas ORDER BY waktu_kejadian DESC";
+
+            using (SqlConnection conn = GetConn())
+            {
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    da.Fill(dt);
+                }
+            }
+            return dt;
+        }
     }
 }
